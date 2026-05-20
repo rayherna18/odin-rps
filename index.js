@@ -1,0 +1,64 @@
+/*
+This will be a console based game, no GUI
+1. Welcome message + call to action for user
+2. Calculate opponent guess ahead of time (random).
+3. Prompt user to enter their action either rock/paper/scissors or 1/2/3.
+4. Compare opponents choice with players to see which is winning (rock > scissors, paper > rock, scissors > paper)
+5. Keep tally of wins between player and opponent.
+6. Repeat for best of 3 or other amount.
+7. Once winner is determined, prompt user if they'd like to play again
+8. 
+*/
+let humanScore = 0;
+let computerScore = 0;
+
+function getComputerChoice() {
+
+    const CHOICES = ["rock", "paper", "scissors"];
+
+    let index = Math.floor(Math.random() * 3);
+    return CHOICES[index];
+}
+
+function getHumanChoice() {
+    let choice = prompt("What will you throw?");
+    choice = choice.toLowerCase();
+    choice =  choice.trim();
+
+    if(choice != "rock" && choice != "paper" && choice != "scissors"){
+        alert("Invalid answer. Try again!");
+        getHumanChoice();
+    }
+
+    return choice;
+}
+
+function playRound(humanChoice, computerChoice) {
+
+    let winMsg = `You win! ${humanChoice[0].toUpperCase()}${humanChoice.substring(1)} beats ${computerChoice[0].toUpperCase()}${computerChoice.substring(1)}.`;
+    let loseMsg = `You lose! ${humanChoice[0].toUpperCase()}${humanChoice.substring(1)} loses to ${computerChoice[0].toUpperCase()}${computerChoice.substring(1)}.`;
+    let tieMsg = `You tied! ${humanChoice[0].toUpperCase()}${humanChoice.substring(1)} is equal to ${computerChoice[0].toUpperCase()}${computerChoice.substring(1)}.`; 
+    if (humanChoice === computerChoice) {
+        console.log(tieMsg);
+    }
+    else if (humanChoice === "rock" && computerChoice === "scissors"){
+        humanChoice++;
+        console.log(winMsg);
+    }
+    else if (humanChoice === "paper" && computerChoice === "rock"){
+        humanChoice++;
+        console.log(winMsg);
+    }
+
+    else if (humanChoice === "scissors" && computerChoice === "paper"){
+        humanChoice++;
+        console.log(winMsg);
+    }
+    else {
+        computerChoice++;
+        console.log(loseMsg);
+    }
+}
+
+playRound(getHumanChoice(), getComputerChoice());
+
