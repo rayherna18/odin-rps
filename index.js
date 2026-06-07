@@ -16,38 +16,32 @@ function getComputerChoice() {
   return CHOICES[index];
 }
 
-function getHumanChoice() {
-  let choice = prompt("What will you throw?");
-  choice = choice.toLowerCase();
-  choice = choice.trim();
-
-  if (choice != "rock" && choice != "paper" && choice != "scissors") {
-    alert("Invalid answer. Try again!");
-    return getHumanChoice();
-  }
-
-  return choice;
-}
-
 function playRound(humanChoice, computerChoice) {
   let winMsg = `You win! ${humanChoice[0].toUpperCase()}${humanChoice.substring(1)} beats ${computerChoice[0].toUpperCase()}${computerChoice.substring(1)}.`;
   let loseMsg = `You lose! ${humanChoice[0].toUpperCase()}${humanChoice.substring(1)} loses to ${computerChoice[0].toUpperCase()}${computerChoice.substring(1)}.`;
   let tieMsg = `You tied! ${humanChoice[0].toUpperCase()}${humanChoice.substring(1)} is equal to ${computerChoice[0].toUpperCase()}${computerChoice.substring(1)}.`;
 
+  let roundMsg = document.createElement("p");
+
   if (humanChoice === computerChoice) {
-    console.log(tieMsg);
+    roundMsg.textContent = tieMsg;
+    resultList.appendChild(roundMsg);
     return "tie";
   } else if (humanChoice === "rock" && computerChoice === "scissors") {
-    console.log(winMsg);
+    roundMsg.textContent = winMsg;
+    resultList.appendChild(roundMsg);
     return "win";
   } else if (humanChoice === "paper" && computerChoice === "rock") {
-    console.log(winMsg);
+    roundMsg.textContent = winMsg;
+    resultList.appendChild(roundMsg);
     return "win";
   } else if (humanChoice === "scissors" && computerChoice === "paper") {
-    console.log(winMsg);
+    roundMsg.textContent = winMsg;
+    resultList.appendChild(roundMsg);
     return "win";
   } else {
-    console.log(loseMsg);
+    roundMsg.textContent = loseMsg;
+    resultList.appendChild(roundMsg);
     return "lose";
   }
 }
@@ -56,23 +50,35 @@ function playGame() {
   let humanScore = 0;
   let computerScore = 0;
 
-  console.log("Welcome to Rock Paper Scissors. Best of 5 wins.");
+  const btn = document.querySelector("#buttons");
 
-  while (humanScore < 3 && computerScore < 3) {
-    let playerWon = playRound(getHumanChoice(), getComputerChoice());
-    if (playerWon === "lose") {
-      computerScore++;
-    } else if (playerWon === "win") {
-      humanScore++;
+  btn.addEventListener("click", (e) => {
+
+    if (humanScore >= 5 || computerScore >= 5){
+      return;
     }
-  }
 
-  let finalMsg =
-    humanScore > computerScore
-      ? `Congratulations you won the game!`
-      : `You lost the game. Better luck next time!`;
+    let choice = e.target.textContent.toLowerCase();
+    let hasPlayerWon = playRound(choice, getComputerChoice());
 
-  console.log(finalMsg);
+    if (hasPlayerWon === "lose") {
+      computerScore++;
+      cpuScoreTxt.textContent = `CPU Score: ${computerScore}`;
+    } else if (hasPlayerWon === "win") {
+      humanScore++;
+      humanScoreTxt.textContent = `Human Score: ${humanScore}`;
+    }
+    if (humanScore >= 5) {
+      outcomeTxt.textContent = "Congratulations you won the game!";
+    } else if (computerScore >= 5) {
+      outcomeTxt.textContent = "You lost the game. Better luck next time!";
+    }
+  });
 }
+
+const humanScoreTxt = document.querySelector(".human-score");
+const cpuScoreTxt = document.querySelector(".cpu-score");
+const resultList = document.querySelector(".results");
+const outcomeTxt = document.querySelector("#outcome");
 
 playGame();
